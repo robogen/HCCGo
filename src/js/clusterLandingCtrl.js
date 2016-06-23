@@ -9,7 +9,7 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
   // Check if app data folder is there, if not, create one with default json file
   var filePath = filePathService.getFilePath();
   var dataPath = filePathService.getDataPath();
-
+  
   var fs = require('fs');
   fs.exists(dataPath, function(exists) {
     if(!exists) {

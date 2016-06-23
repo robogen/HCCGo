@@ -1,37 +1,25 @@
-
-
 preferencesModule = angular.module('PreferencesManager', [])
 
 preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q) {
-  
+  var fs = require("fs");
   var clustersDefer;
   
   var init = function() {
     // Read in the clusters file
     readClustersDefer = $q.defer();
     clustersDefer = readClustersDefer.promise;
-    var fs = require("fs");
     fs.readFile("data/clusters.json", function(err, data) {
       if(err) {
         $log.error(err);
         readClustersDefer.reject(err);
       }
-      
       clusters = JSON.parse(data);
       readClustersDefer.resolve(clusters.clusters);
-      
     })
     
-    
-    
     console.log("Current Directory = " + process.cwd());
-    fs = require("fs");
     console.log(fs.readdirSync(process.cwd()));
-    
-    
-    
   }
-  
   
   
   var getClusters = function() {
@@ -39,13 +27,10 @@ preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q)
     clustersDefer.then(function(clusters) {
       returnDefer.resolve(clusters);
     })
-    
     return returnDefer.promise;
-    
   }
   
   var setClusters = function(clusters) {
-    
     
   }
   
@@ -59,7 +44,6 @@ preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q)
       getClusters: getClusters,
       setClusters: setClusters,
       addCluster: addCluster
-      
     }
 }]);
   

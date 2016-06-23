@@ -356,15 +356,6 @@ connectionService.getUsername().then(function(username) {
        $scope.localWD = process.env.HOME;
        $log.debug(process);
        localRead($scope.localWD);    // Sets local display
-       disk.check($scope.localWD, function(err, info) {
-           if (err) {
-               $log.debug(err);
-           } else {
-               $log.debug(info.available);
-               $log.debug(info.free);
-               $log.debug(info.total);
-           }
-       });
-   }
+  }
  
 }]);

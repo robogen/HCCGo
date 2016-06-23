@@ -2,6 +2,7 @@
   "name": "HCCGo",
   "version": "0.1.0",
   "main": "index.html",
+  "node-main": "background.js",
   "description": "Interface for HCC Resouces",
   "keywords": [
     "HCC"
@@ -28,6 +29,7 @@
     "async": ">= 1.5.2",
     "path": ">= 0.12.7",
     "diskusage": ">= 0.1.5",
-    "csv-parse": ">= 1.1.1"
+    "csv-parse": ">= 1.1.1",
+    "sqlite3": ">= 3.1.4"
   }
 }
