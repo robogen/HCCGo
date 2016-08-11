@@ -5,6 +5,8 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
 
   $scope.params = $routeParams;
   var clusterInterface = null;
+  var path = require('path');
+  var jobHistory = path.join(__dirname, 'data/jobHistory.json');
 
   // Check if app data folder is there, if not, create one with default json file
   var filePath = filePathService.getFilePath();
@@ -16,7 +18,7 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
         fs.mkdir(dataPath, function() {
           fs.exists(filePath, function(fileExists) {
             if(!fileExists)
-              fs.createReadStream('data/jobHistory.json').pipe(fs.createWriteStream(filePath));
+              fs.createReadStream(jobHistory).pipe(fs.createWriteStream(filePath));
           });
         });
     }
@@ -83,21 +85,7 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
 
   });
 
-  $scope.logout = function() {
 
-    $location.path("/");
-
-  }
-
-  $scope.goToUpload = function() {
-    $location.path("cluster/" + $scope.params.clusterId + "/filesystem");
-  }
-
-  $scope.jobHistory = function() {
-    $location.path("cluster/" + $scope.params.clusterId + "/jobHistory");
-
-  }
-  
   $scope.refreshCluster = function() {
     getClusterStats($scope.params.clusterId);
     
@@ -189,17 +177,6 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
 
 
   }
-  
-  // Get the username
-  function getUsername() {
-
-    connectionService.getUsername().then(function(username) {
-      $scope.username = username;
-    })
-
-  }
-
-  getUsername();
   
   preferencesManager.getClusters().then(function(clusters) {
     // Get the cluster type

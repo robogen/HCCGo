@@ -2,14 +2,6 @@
 clusterUploadModule = angular.module('HccGoApp.clusterFileSystemCtrl', ['ngRoute' ]);
 
 clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr) {
- $scope.logout = function() {
-
-    $location.path("/");
-
-  }
-connectionService.getUsername().then(function(username) {
-    $scope.username = username;
-});
 
    // Initialization functions
    var disk = require('diskusage');
@@ -349,6 +341,10 @@ connectionService.getUsername().then(function(username) {
        // TODO: Get working directory on windows machines
        $log.debug("Process env: ");
        $log.debug(process.env);
+       $scope.localWD = process.env.HOMEDRIVE + process.env.HOMEPATH;
+       $log.debug(process);
+       $log.debug("localWD = " + $scope.localWD);
+       localRead($scope.localWD);
    } else {
        // Runs for Mac and Linux systems
        // Establishes Displayed files
