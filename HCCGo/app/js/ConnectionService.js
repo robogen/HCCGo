@@ -7,9 +7,9 @@ connectionModule.factory('connectionService',['$log', '$q', '$routeParams', func
                      tusker: null,
                      sandhills: null,
                      glidein: null};
-   var async = require('async');
-   var path = require('path');
-   var fs = require('fs');
+   const async = require('async');
+   const path = require('path');
+   const fs = require('fs');
    $log.debug(connectionList);
 
    /**
@@ -119,7 +119,6 @@ connectionModule.factory('connectionService',['$log', '$q', '$routeParams', func
       }, function(sftp, callback){
         
         // Check for writeable directory
-        path = require('path');
         // Try to write to a test file
         var dirname_path = path.dirname(file);
         var test_path = path.join(dirname_path, ".hccgo-test" + makeid());

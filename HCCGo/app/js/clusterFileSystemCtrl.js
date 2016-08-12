@@ -4,15 +4,16 @@ clusterUploadModule = angular.module('HccGoApp.clusterFileSystemCtrl', ['ngRoute
 clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr) {
 
    // Initialization functions
-   var disk = require('diskusage');
-   $scope.params = $routeParams
-   var clusterInterface = null;
-   var path = require("path");
-   var fs = require("fs");
-   var async = require("async");
+   const disk = require('diskusage');
+   const path = require("path");
+   const fs = require("fs");
+   const async = require("async");
+
    $scope.sourceDir = {name: ".."};
    $scope.localFiles = [];
    $scope.remoteFiles = [];
+   $scope.params = $routeParams
+   var clusterInterface = null;
 
    // Sets default values on load
    $scope.onViewLoad = function () {

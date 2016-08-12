@@ -1,35 +1,23 @@
 preferencesModule = angular.module('PreferencesManager', [])
 
 preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q) {
-  var fs = require("fs");
   var clustersDefer;
   
-  var init = function() {
-    // Read in the clusters file
-    readClustersDefer = $q.defer();
-    clustersDefer = readClustersDefer.promise;
-    var fs = require("fs");
-    var path = require("path");
-    var clusters = path.join(__dirname, 'data/clusters.json');
-    fs.readFile(clusters, function(err, data) {
-      if(err) {
-        $log.error(err);
-        readClustersDefer.reject(err);
-      }
-      clusters = JSON.parse(data);
-      readClustersDefer.resolve(clusters.clusters);
-    })
-    
-    console.log("Current Directory = " + process.cwd());
-    console.log(fs.readdirSync(process.cwd()));
-  }
-  
-  
+  const storage = require('electron-json-storage');
+  const fs = require('fs');
+  const path = require('path');
+
   var getClusters = function() {
     var returnDefer = $q.defer();
-    clustersDefer.then(function(clusters) {
-      returnDefer.resolve(clusters);
-    })
+    storage.get('clusters', function(error, data) {
+      if (error) {
+         $log.debug(error);
+         returnDefer.reject(error);
+      }
+
+      returnDefer.resolve(data);
+
+    });
     return returnDefer.promise;
   }
   
@@ -41,12 +29,10 @@ preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q)
     
   }
   
-  
-  init();
-    return {
-      getClusters: getClusters,
-      setClusters: setClusters,
-      addCluster: addCluster
-    }
+  return {
+    getClusters: getClusters,
+    setClusters: setClusters,
+    addCluster: addCluster
+  }
 }]);
   

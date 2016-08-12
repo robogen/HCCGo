@@ -3,26 +3,14 @@ jobSubmissionModule = angular.module('HccGoApp.jobSubmissionCtrl', ['ngRoute', '
 
 jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', 'jobService', 'filePathService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr, jobService, filePathService) {
 
+  const storage = require('electron-json-storage');
+
   $scope.params = $routeParams;
-
-  // get path to work directory
-  var getWork = function() {
-    var deferred = $q.defer();
-
-    connectionService.runCommand('echo $WORK').then(function(data) {
-
-      deferred.resolve(data.trim());
-
-    })
-
-    return deferred.promise;
-
-  }
 
   var loadedJob = jobService.getJob();
 
   if(loadedJob == null) {
-    getWork().then(function(workPath) {
+    connectionService.getWorkWD().then(function(workPath) {
       workPath = workPath + "/";
       $scope.job = {location: workPath, error: workPath, output: workPath};
     });
@@ -43,8 +31,16 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
   // load json file
   var filePath = filePathService.getFilePath();
   var jsonFile;
-  $.getJSON(filePath, function(json) {
+  /*$.getJSON(filePath, function(json) {
     jsonFile = json;
+  });*/
+
+  storage.get('jobHistory', function(error, data) {
+    if (error) {
+      $log.debug(error);
+    }
+
+    jsonFile = data;
   });
 
   $scope.cancel = function() {
@@ -158,7 +154,7 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
       }
       jsonFile.jobs.push(newJob);
     }
-    var fs = require("fs");
+    /*var fs = require("fs");
     fs.writeFile(filePath, JSON.stringify(jsonFile, null, 2), function(err) {
       if(err) {
         return console.error(err);
@@ -166,7 +162,13 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
       else {
         console.log("History written successfully.");
       }
-    });
+    });*/
+
+    storage.set('jobHistory', jsonFile, function(error) {
+      if (error) {
+        $log.debug(error);
+      }
+    })
     
     async = require("async");
     // Call the series of actions to submit a job

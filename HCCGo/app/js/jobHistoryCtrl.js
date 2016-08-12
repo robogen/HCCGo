@@ -18,6 +18,8 @@ jobHistoryModule.service('jobService', function() {
 
 }).controller('jobHistoryCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'jobService', 'filePathService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, jobService, filePathService) {
 
+  const storage = require('electron-json-storage');
+
   $scope.params = $routeParams;
 
   $scope.cancel = function() {
@@ -38,11 +40,18 @@ jobHistoryModule.service('jobService', function() {
   }
 
   // load json file
-  var filePath = filePathService.getFilePath();
+  /*var filePath = filePathService.getFilePath();
   var jsonFile
   $.getJSON(filePath, function(json) {
     $scope.jobs = json.jobs;
     jsonFile = json;
+  });*/
+  storage.get('jobHistory', function(error, data){
+    if (error) {
+        $log.debug(error);
+    }
+
+    $scope.jobs = data.jobs;
   });
 
   $scope.deleteJob = function(job) {
