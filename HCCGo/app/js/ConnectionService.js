@@ -105,15 +105,16 @@ connectionModule.factory('connectionService',['$log', '$q', '$routeParams', func
         var sftp_return = connectionList[getClusterContext()].sftp(function (err, sftp) {
           logger.log("Got sftp now");
           if (err){
-            return callback(err);
+            callback(err);
+          } else {
+            callback(null, sftp);
           }
-          return callback(null, sftp);
         });
         
         if (!sftp_return) {
           callback("Unable to get sftp handle");
           logger.log("Unable to get sftp handle");
-          return callback("Unable to get sftp handle");
+          //callback("Unable to get sftp handle");
         }
         
       }, function(sftp, callback){
@@ -121,34 +122,37 @@ connectionModule.factory('connectionService',['$log', '$q', '$routeParams', func
         // Check for writeable directory
         // Try to write to a test file
         var dirname_path = path.dirname(file);
-        var test_path = path.join(dirname_path, ".hccgo-test" + makeid());
+        $log.debug("dirname_path: " + dirname_path);
+        var test_path = path.join(dirname_path, "/.hccgo-test" + makeid());
+        $log.debug("test_path: " + test_path);
         
         sftp.open(test_path, 'w', function(err, handle) {
           if (err){
             sftp.end();
-            return callback(err);
+            callback(err);
+          } else {
+            sftp.close(handle, function(err) {
+              if (err) {
+                sftp.end();
+                callback(err);
+              } else {
+                callback(null, sftp, test_path);
+              }
+            });
           }
-          sftp.close(handle, function(err) {
-            if (err) {
-              sftp.end();
-              return callback(err);
-            }
-            return callback(null, sftp, test_path);
-          });
         });
       },
       // Now, delete the file
       function(sftp, test_path, callback) {
         
         sftp.unlink(test_path, function(err) {
-          if (err) {
-            sftp.end();
-            return callback(test_path + ": " + err);
-          }
           sftp.end();
-          return callback(null);
-          
-          
+          if (err) {
+            $log.debug(test_path + ": " + err);
+            callback(err);
+          } else {
+            callback(null);
+          }
         });
         
       }
