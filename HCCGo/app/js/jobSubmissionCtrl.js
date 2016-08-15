@@ -1,13 +1,23 @@
 
 jobSubmissionModule = angular.module('HccGoApp.jobSubmissionCtrl', ['ngRoute', 'toastr' ]);
 
-jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', 'jobService', 'filePathService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr, jobService, filePathService) {
+jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', 'jobService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr, jobService) {
 
   const storage = require('electron-json-storage');
+  const async = require('async');
 
   $scope.params = $routeParams;
 
   var loadedJob = jobService.getJob();
+  // load json file
+  var jsonFile;
+  storage.get('jobHistory', function(error, data) {
+    if (error) {
+      $log.debug(error);
+    }
+
+    jsonFile = data;
+  });
 
   if(loadedJob == null) {
     connectionService.getWorkWD().then(function(workPath) {
@@ -27,21 +37,6 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
       commands: loadedJob.commands
     };
   }
-
-  // load json file
-  var filePath = filePathService.getFilePath();
-  var jsonFile;
-  /*$.getJSON(filePath, function(json) {
-    jsonFile = json;
-  });*/
-
-  storage.get('jobHistory', function(error, data) {
-    if (error) {
-      $log.debug(error);
-    }
-
-    jsonFile = data;
-  });
 
   $scope.cancel = function() {
     $location.path("cluster/" + $scope.params.clusterId + "/jobHistory");
@@ -154,23 +149,14 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
       }
       jsonFile.jobs.push(newJob);
     }
-    /*var fs = require("fs");
-    fs.writeFile(filePath, JSON.stringify(jsonFile, null, 2), function(err) {
-      if(err) {
-        return console.error(err);
-      }
-      else {
-        console.log("History written successfully.");
-      }
-    });*/
 
+	// Update jobHistory file
     storage.set('jobHistory', jsonFile, function(error) {
       if (error) {
         $log.debug(error);
       }
     })
     
-    async = require("async");
     // Call the series of actions to submit a job
     async.series([
       function(callback) {

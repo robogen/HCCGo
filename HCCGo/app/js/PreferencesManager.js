@@ -1,12 +1,12 @@
 preferencesModule = angular.module('PreferencesManager', [])
 
 preferencesModule.factory('preferencesManager',['$log', '$q', function($log, $q) {
-  var clustersDefer;
-  
   const storage = require('electron-json-storage');
   const fs = require('fs');
   const path = require('path');
-
+  
+  var clustersDefer;
+  
   var getClusters = function() {
     var returnDefer = $q.defer();
     storage.get('clusters', function(error, data) {

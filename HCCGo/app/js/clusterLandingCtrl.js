@@ -1,7 +1,8 @@
 
 clusterLandingModule = angular.module('HccGoApp.clusterLandingCtrl', ['ngRoute' ]);
 
-clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'filePathService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, filePathService) {
+clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 
+                                function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager) {
 
   $scope.params = $routeParams;
   var clusterInterface = null;
