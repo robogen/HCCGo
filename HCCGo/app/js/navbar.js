@@ -11,6 +11,10 @@ navBar.controller('NavCtrl', ['$route', '$scope', '$routeParams', '$location', '
       connectionService.closeStream();
       $location.path("/");
    };
+   
+   $scope.settings = function() {
+      $location.path("/cluster/" + $routeParams.clusterId + "/settings");
+   }
 
    $scope.goHome = function() {
      $location.path("/cluster/" + $routeParams.clusterId);

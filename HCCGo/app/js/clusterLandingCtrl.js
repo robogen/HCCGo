@@ -9,7 +9,7 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
   var jobHistory = path.join(__dirname, 'data/jobHistory.json');
 
   // Check if app data folder is there, if not, create one with default json file
-  var filePath = filePathService.getFilePath();
+  /*var filePath = filePathService.getFilePath();
   var dataPath = filePathService.getDataPath();
   
   var fs = require('fs');
@@ -22,7 +22,7 @@ clusterLandingModule.controller('clusterLandingCtrl', ['$scope', '$log', '$timeo
           });
         });
     }
-  });
+  });*/
 
   // Generate empty graphs
   var homeUsageGauge = c3.generate({

@@ -71,6 +71,24 @@ storage.has('jobHistory', function(error, hasKey) {
     }
 });
 
+storage.has('settings', function(error, hasKey) {
+    if (error) {
+        console.log(error);
+    }
+    
+    if(!hasKey) {
+        storage.set('settings',
+		            {
+			          "debug": false
+			        },
+					function(error) {
+					  if (error) {
+					      console.log(error);
+					  }
+					});
+    }
+});
+
 app.on('ready', function() {
 
     mainWindow = new BrowserWindow({
