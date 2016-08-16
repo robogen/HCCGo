@@ -1,7 +1,8 @@
 
 clusterUploadModule = angular.module('HccGoApp.clusterFileSystemCtrl', ['ngRoute' ]);
 
-clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr) {
+clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'notifierService', 
+                                                         function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, notifierService) {
 
    // Initialization functions
    const disk = require('diskusage');
@@ -154,7 +155,7 @@ clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$tim
 
    $scope.verifyUploadCancel = function () {
       $scope.userUpAuth = false;
-      toastr.warning('Action cancelled by user.');
+      notifierService.warning('Action cancelled by user.');
    }
 
    // Upload entire directory
@@ -181,9 +182,7 @@ clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$tim
          });
        }, function() {
          // update view
-         toastr.success('Your file transfer was succesfully!', 'Files Transfer!', {
-           closeButton: true
-         });
+         notifierService.success('Your file transfer was succesfully!', 'Files Transfer!');
          $scope.processFinished = true;
          remoteRead($scope.remoteWD);
          
@@ -210,7 +209,7 @@ clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$tim
 
    $scope.verifyDownloadCancel = function () {
       $scope.userDownAuth = false;
-      toastr.warning('Action cancelled by user.');
+      notifierService.warning('Action cancelled by user.');
    }
 
    $scope.downloadCall = function () {
@@ -240,9 +239,7 @@ clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$tim
          });
        }, function() {
          // update view
-         toastr.success('Your file transfer was succesfully!', 'Files Transfer!', {
-           closeButton: true
-         });
+         notifierService.success('Your file transfer was succesfull!', 'File(s) Transfered!');
          $scope.processFinished = true;   // Show finished message
          localRead($scope.localWD);
          
@@ -353,6 +350,6 @@ clusterUploadModule.controller('clusterFileSystemCtrl', ['$scope', '$log', '$tim
        $scope.localWD = process.env.HOME;
        $log.debug(process);
        localRead($scope.localWD);    // Sets local display
-  }
+   }
  
 }]);

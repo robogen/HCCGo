@@ -1,7 +1,7 @@
 
-jobSubmissionModule = angular.module('HccGoApp.jobSubmissionCtrl', ['ngRoute', 'toastr' ]);
+jobSubmissionModule = angular.module('HccGoApp.jobSubmissionCtrl', ['ngRoute' ]);
 
-jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'toastr', 'jobService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, toastr, jobService) {
+jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout', 'connectionService', '$routeParams', '$location', '$q', 'preferencesManager', 'notifierService', 'jobService', function($scope, $log, $timeout, connectionService, $routeParams, $location, $q, preferencesManager, notifierService, jobService) {
 
   const storage = require('electron-json-storage');
   const async = require('async');
@@ -186,17 +186,13 @@ jobSubmissionModule.controller('jobSubmissionCtrl', ['$scope', '$log', '$timeout
     ], function(err, result) {
       // If there has been an error in the series
       if (err) {
-        toastr.error('There was an error in submitting your job to the cluster!', 'Job Submission Failed!', {
-          closeButton: true
-        });
+        notifierService.error('There was an error in submitting your job to the cluster!', 'Job Submission Failed!');
         $("#submitbtn").prop('disabled', false);
         var curValue = 0;
         $('#submitprogress').css('width', curValue+'%').attr('aria-valuenow', curValue);
       } else {
         // Everything was successful!
-        toastr.success('Your job was succesfully submitted to the cluster!', 'Job Submitted!', {
-          closeButton: true
-        });
+        notifierService.success('Your job was succesfully submitted to the cluster!', 'Job Submitted!');
         $location.path("cluster/" + $scope.params.clusterId);
       }
     });

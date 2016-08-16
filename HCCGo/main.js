@@ -1,6 +1,7 @@
 'use strict';
 
 const {app, BrowserWindow} = require('electron');
+const {ipcMain} = require('electron');
 const storage = require('electron-json-storage');
 
 let mainWindow = null;
@@ -95,6 +96,11 @@ app.on('ready', function() {
         width: 1000,
         height: 800
     });
+	
+	ipcMain.on('focus-check-reply', (event, arg) => {
+	    console.log("Checking if app has focus");
+		event.sender.send('focus-check-message', mainWindow.isFocused());
+	});
 
     mainWindow.on('closed', function() {
         mainWindow = null;
