@@ -45,13 +45,10 @@ module.exports = function(grunt) {
     },
     bower: {
       install: {
-        options: {
-          targetDir: 'HCCGo/app/lib',
-          layout: 'byComponent',
-          install: true,
-          verbose: false,
-          cleanTargetDir: false
-        }
+        dest: 'HCCGo/app/lib',
+	      options: {
+            expand: true
+	     }
       }
     },
     jsdoc: {
@@ -70,29 +67,29 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-auto-install');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-bower-task');
+  grunt.loadNpmTasks('grunt-bower');
   grunt.loadNpmTasks('grunt-marked');
   grunt.loadNpmTasks('grunt-jsdoc');
   grunt.registerTask('default', ['less',
-                                 'bower',
+                                 'bower:install',
 				 'auto_install']);
   grunt.registerTask('run', ['less',
-                             'bower',
+                             'bower:install',
                              'marked',
 			     'auto_install',
 			     'shell:start_electron']);
   grunt.registerTask('packageWin', ['less',
-                                    'bower',
+                                    'bower:install',
                                     'marked',
 				    'auto_install',
 				    'shell:build_electron_windows']);
   grunt.registerTask('packageOsx', ['less',
-                                    'bower',
+                                    'bower:install',
                                     'marked',
 				    'auto_install',
 				    'shell:build_electron_macos']);  
   grunt.registerTask('packageNix', ['less',
-                                    'bower',
+                                    'bower:install',
                                     'marked',
 				    'auto_install',
 				    'shell:build_electron_linux']);
