@@ -49,7 +49,7 @@ module.exports = function(grunt) {
           targetDir: 'HCCGo/app/lib',
           layout: 'byComponent',
           install: true,
-          verbose: true,
+          verbose: false,
           cleanTargetDir: false
         }
       }
